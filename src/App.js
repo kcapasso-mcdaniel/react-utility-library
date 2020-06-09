@@ -4,7 +4,7 @@ import "./style/master.scss";
 function App() {
    return (
       <div className="App">
-         <h1 className="text-primary">Hello World</h1>
+         <h1 className="text-info">Hello World</h1>
       </div>
    );
 }
