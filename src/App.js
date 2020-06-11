@@ -15,21 +15,33 @@ export default class App extends React.Component {
    render() {
       const orderedData = orderBy(uiData, "name", "asc");
 
+      const getFunctionsNum = () => {
+         return uiData.length;
+      };
+
       // React will look out for this and needs to return JSK
       // creating new variable and use orderBy method pass the collection, sort by what and what order returned
       return (
          // wrap in parentheses when multiple html elements
          <div className="container">
             <div className="row">
-               {orderedData.map((functionUI) => {
-                  return (
-                     <FunctionUI
-                        name={functionUI.name}
-                        desc={functionUI.desc}
-                        inputs={functionUI.inputs}
-                     />
-                  );
-               })}
+               <div className="col-12">
+                  <h1 className="d-flex justify-content-center text-danger">
+                     JavaScript Functions: Basic
+                  </h1>
+                  <p className="text-center lead mb-4">
+                     {getFunctionsNum()}&nbsp;functions documented
+                  </p>
+                  {orderedData.map((functionUI) => {
+                     return (
+                        <FunctionUI
+                           name={functionUI.name}
+                           desc={functionUI.desc}
+                           inputs={functionUI.inputs}
+                        />
+                     );
+                  })}
+               </div>
             </div>
          </div>
       );
