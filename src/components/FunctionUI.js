@@ -1,12 +1,21 @@
 import React from "react";
 
+// FunctionUI Component
 export default function FunctionUI(props) {
+   // functional component
+   // props
    const renderInputs = (num) => {
       const inputs = [];
       // for every number we have we are going to go through a loop and as long as less than zero increment
       for (let i = 0; i < num; i++) {
+         const id = `input-${props.name}-${i}`;
          inputs.push(
-            <input type="text" className="form-control inline-action" />
+            <input
+               type="text"
+               className="form-control inline-action"
+               key={id}
+               id={id}
+            />
          );
       }
       return inputs;
