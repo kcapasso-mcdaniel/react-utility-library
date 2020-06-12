@@ -8,13 +8,13 @@ export default function FunctionUI(props) {
       const inputs = [];
       // for every number we have we are going to go through a loop and as long as less than zero increment
       for (let i = 0; i < num; i++) {
-         const id = `input-${props.name}-${i}`;
+         // const id = `input-${props.name}-${i}`;
          inputs.push(
             <input
                type="text"
                className="form-control inline-action"
-               key={id}
-               id={id}
+               key={i}
+               // id={id}
             />
          );
       }

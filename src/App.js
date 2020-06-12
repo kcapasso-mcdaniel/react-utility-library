@@ -12,34 +12,61 @@ export default class App extends React.Component {
       console.log(uiData);
       this.state = {
          isFavoritesChecked: false,
-         allFuncs: uiData,
-         displayFuncs: uiData,
+         allFuncs: orderBy(uiData, "order", "desc"),
+         displayedFuncs: orderBy(uiData, "order", "desc"),
+         // set to Most Recent
+         orderBy: '["order", "desc"]',
       };
    }
 
-   toggleFavorites(e) {
-      // whatever isfavorites is checked we are going to flip it
-      this.setState({ isFavoritesChecked: !this.state.isFavoritesChecked });
+   filterFuncs(e) {
       // grabbing the user input what is the id of what the user just did
       const isFavoritesChecked = document.getElementById("viewMode-favorites")
          .checked;
-      console.log(isFavoritesChecked);
+      // variable to check the value of the search input and converting to lowerCase
+      const searchInput = document
+         .getElementById("search-input")
+         .value.toLowerCase();
       // copy of all the functions
       const allFuncs = [...this.state.allFuncs];
-      // if the user input is viewMode favorites
+      // if is favorites is checked
       if (isFavoritesChecked) {
+         this.setState({ isFavoritesChecked: true });
          // run a filter on this copy and return things where isFavorite
-         const filteredFuncs = allFuncs.filter((func) => {
+         const favoriteFuncs = allFuncs.filter((func) => {
             // return when is true
             return func.isFavorite;
          });
-         console.log(filteredFuncs);
-
+         console.log(favoriteFuncs);
+         // true goes to new array created by filter function
+         const filteredFuncs = favoriteFuncs.filter((func) => {
+            // if function name contains any part of the search input return true else return false
+            return func.name.toLowerCase().indexOf(searchInput) >= 0;
+         });
+         const orderArr = JSON.parse(this.state.orderBy);
+         console.log("orderArr:", ...orderArr);
+         // order the filtered functions
+         const orderedFuncs = orderBy(filteredFuncs, ...orderArr);
          // setting the state - displayed funcs to our filtered funcs
-         this.setState({ displayFuncs: filteredFuncs });
+         this.setState({ displayedFuncs: orderedFuncs });
       } else {
-         this.setState({ displayFuncs: allFuncs });
+         // whatever isfavorites is checked we are going to flip it
+         this.setState({ isFavoritesChecked: false });
+         const filteredFuncs = allFuncs.filter((func) => {
+            // if function name contains any part of the search input return true else return false
+            return func.name.toLowerCase().indexOf(searchInput) >= 0;
+         });
+         const orderArr = JSON.parse(this.state.orderBy);
+         console.log("orderArr:", ...orderArr);
+         const orderedFuncs = orderBy(filteredFuncs, ...orderArr);
+         this.setState({ displayedFuncs: orderedFuncs });
       }
+   }
+
+   changeOrder(e) {
+      this.setState({ orderBy: e.target.value }, () => {
+         this.filterFuncs();
+      });
    }
 
    render() {
@@ -67,8 +94,9 @@ export default class App extends React.Component {
                         className="custom-control-input"
                         // access the state variable
                         checked={!this.state.isFavoritesChecked}
+                        // change that calls the function within
                         onChange={(e) => {
-                           this.toggleFavorites(e);
+                           this.filterFuncs(e);
                         }}
                      />
                      <label
@@ -86,7 +114,7 @@ export default class App extends React.Component {
                         className="custom-control-input"
                         checked={this.state.isFavoritesChecked}
                         onChange={(e) => {
-                           this.toggleFavorites(e);
+                           this.filterFuncs(e);
                         }}
                      />
                      <label
@@ -106,19 +134,28 @@ export default class App extends React.Component {
                            aria-label="Search all functions"
                            aria-describedby="search-input"
                            id="search-input"
+                           onChange={(e) => {
+                              this.filterFuncs(e);
+                           }}
                         />
                      </div>
                      <div className="col-6">
-                        <select className="form-control">
-                           <option>Most recent</option>
-                           <option>Oldest</option>
-                           <option>A - Z</option>
-                           <option>Z - A</option>
+                        <select
+                           className="form-control"
+                           value={this.state.orderBy}
+                           onChange={(e) => this.changeOrder(e)}
+                        >
+                           <option value='["order", "desc"]'>
+                              Most recent
+                           </option>
+                           <option value='["order", "asc"]'>Oldest</option>
+                           <option value='["name", "asc"]'>A - Z</option>
+                           <option value='["name", "desc"]'>Z - A</option>
                         </select>
                      </div>
                   </div>
                </div>
-               {this.state.displayFuncs.map((functionUI) => {
+               {this.state.displayedFuncs.map((functionUI) => {
                   const { name, desc, inputs } = functionUI;
 
                   return (
