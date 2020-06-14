@@ -14,7 +14,7 @@ export default class App extends React.Component {
          isFavoritesChecked: false,
          allFuncs: orderBy(uiData, "order", "desc"),
          displayedFuncs: orderBy(uiData, "order", "desc"),
-         // set to Most Recent
+         // storing a string as the value of the state - set to Most Recent
          orderBy: '["order", "desc"]',
       };
    }
@@ -142,6 +142,7 @@ export default class App extends React.Component {
                      <div className="col-6">
                         <select
                            className="form-control"
+                           // select needs to have a value
                            value={this.state.orderBy}
                            onChange={(e) => this.changeOrder(e)}
                         >
