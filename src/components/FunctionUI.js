@@ -14,8 +14,14 @@ export default class FunctionUI extends React.Component {
       };
    }
 
-   // Code Display method
-   toggleCodeDisplay() {}
+   // method to display the code when clicked on
+   // alertnate code - set to the opposite using Bang Symbol (!)
+   // this.setState(isCodeDisplayed: !this.state.isCodeDisplayed)
+   toggleCodeDisplay() {
+      if (this.state.isCodeDisplayed === false) {
+         this.setState({ isCodeDisplayed: true });
+      } else this.setState({ isCodeDisplayed: false });
+   }
 
    // function for getting the input data
    getUserInput() {
@@ -40,7 +46,6 @@ export default class FunctionUI extends React.Component {
 
    render() {
       const props = this.props;
-      console.log(utils.add(4, 5));
 
       const renderInputs = (num) => {
          const inputs = [];
@@ -61,12 +66,13 @@ export default class FunctionUI extends React.Component {
 
       return (
          <div className="col-12 col-lg-8 offset-lg-2 mb-5">
-            <p className="name">
+            {/* on click event assigned to the name */}
+            <p className="name" onClick={() => this.toggleCodeDisplay()}>
                <b>{props.name}</b>&nbsp;-&nbsp;{props.desc}
             </p>
             {this.state.isCodeDisplayed && (
                <pre>
-                  <code>Hello</code>
+                  <code>{String(utils[props.name])}</code>
                </pre>
             )}
             <div className="actions float-right">

@@ -1,5 +1,4 @@
-// function to parse JSON
-// try catch json parse and if error return the string else return parsed string
+// function to safely parse json
 const safelyParseJSON = (str) => {
    try {
       JSON.parse(str);
